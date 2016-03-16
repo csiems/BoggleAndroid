@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="dice">
+        <item>@array/die1</item>
+        <item>@array/die2</item>
+    </array>
+
+    <string-array name="die1">
+        <item>R</item>
+        <item>I</item>
+        <item>F</item>
+        <item>O</item>
+        <item>B</item>
+        <item>X</item>
+    </string-array>
+
+    <string-array name="die2">
+        <item>I</item>
+        <item>F</item>
+        <item>E</item>
+        <item>H</item>
+        <item>E</item>
+        <item>Y</item>
+    </string-array>
+</resources>

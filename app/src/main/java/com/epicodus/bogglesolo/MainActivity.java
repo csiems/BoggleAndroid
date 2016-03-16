@@ -67,12 +67,11 @@ public class MainActivity extends AppCompatActivity {
             specificDie.recycle();
         }
 
-        if (thereAreTwoVowels(letters)) {
-            return letters;
+        if (!thereAreTwoVowels(letters)) {
+            return rollDice(diceToRoll);
         } else {
-            rollDice(diceToRoll);
+            return letters;
         }
-        return letters;
     }
 
     public String getLetterString(ArrayList<String> selectedLetters) {

@@ -3,10 +3,14 @@ package com.epicodus.bogglesolo;
 import android.content.res.TypedArray;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -17,8 +21,12 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.lettersTextView) TextView lettersTextView;
     @Bind(R.id.rollButton) Button rollButton;
     @Bind(R.id.submitButton) Button submitButton;
-    private TypedArray dice;
-
+    @Bind(R.id.userInputEditText) EditText userInputEditText;
+    @Bind(R.id.inputsListView) ListView inputsListView;
+    private TypedArray mDice;
+    private ArrayList<String> mSelectedLetters;
+    private ArrayList<String> mUserInputs = new ArrayList<>();
+    private ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,15 +34,42 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        dice = getResources().obtainTypedArray(R.array.dice);
+        mDice = getResources().obtainTypedArray(R.array.dice);
+
+        adapter = new ArrayAdapter(this, R.layout.word_list_item, mUserInputs);
+        inputsListView.setAdapter(adapter);
 
         rollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ArrayList<Integer> diceToRoll = getDiceToRoll();
-                ArrayList<String> selectedLetters = rollDice(diceToRoll);
-                String newLetterString = getLetterString(selectedLetters);
+                mSelectedLetters = rollDice(diceToRoll);
+                String newLetterString = getLetterString(mSelectedLetters);
                 lettersTextView.setText(newLetterString);
+            }
+        });
+        
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userInput;
+
+                if (lettersTextView.getText().toString().equals("ROLL THE DICE TO START")) {
+                    makeToast("Roll the dice before submitting words");
+                } else {
+                    userInput = validateInput(userInputEditText.getText().toString());
+                    if (userInput.length() < 3) {
+                        makeToast("Enter a word of at least three letters");
+                    } else if (!allLettersAreInList(mSelectedLetters, userInput)) {
+                        makeToast("You must go to Boggle with the letters you have, not the letters you wish you had.");
+                    } else if (mUserInputs.contains(userInput)) {
+                        makeToast("Word already added");
+                    } else {
+                        mUserInputs.add(0, userInput);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+                userInputEditText.setText("");
             }
         });
     }
@@ -43,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Integer> grabbedDice = new ArrayList<>();
 
         for (int i = 0; i < 8; i++) {
-            Integer dieIndex = (int) (Math.random() * (dice.length() - 1));
+            Integer dieIndex = (int) (Math.random() * (mDice.length() - 1));
             if (grabbedDice.contains(dieIndex)) {
                 i--;
             } else {
@@ -57,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         TypedArray specificDie;
         ArrayList<String> letters = new ArrayList<>();
         for (int i = 0; i < diceToRoll.size(); i++) {
-            int resId = dice.getResourceId(diceToRoll.get(i), -1);
+            int resId = mDice.getResourceId(diceToRoll.get(i), -1);
             if (resId < 0) {
                 continue;
             }
@@ -92,5 +127,31 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return vowelCount >= 2;
+    }
+
+    public boolean allLettersAreInList(ArrayList<String> availableLetters, String input) {
+        //we make a shallow copy of the the ArrayList to avoid removing letters from the member variable
+        ArrayList<String> tempLetters = new ArrayList<>(availableLetters);
+
+        String[] splitInput = input.split("");
+        boolean allMatch = true;
+        for (String letter : splitInput) {
+            if (!tempLetters.contains(letter) && !letter.equals("")) {
+                allMatch = false;
+            } else {
+                tempLetters.remove(letter);
+            }
+        }
+        return allMatch;
+    }
+
+    public String validateInput(String input) {
+        return input.toUpperCase().replaceAll("(?i)[^A-Z]", "");
+    }
+
+    public void makeToast(String message) {
+        Toast toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, -30);
+        toast.show();
     }
 }

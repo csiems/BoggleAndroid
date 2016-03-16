@@ -61,11 +61,16 @@ public class MainActivity extends AppCompatActivity {
             if (resId < 0) {
                 continue;
             }
-
             specificDie = getResources().obtainTypedArray(resId);
             int rolledSide = (int) (Math.random() * 5);
             letters.add(specificDie.getString(rolledSide));
             specificDie.recycle();
+        }
+
+        if (thereAreTwoVowels(letters)) {
+            return letters;
+        } else {
+            rollDice(diceToRoll);
         }
         return letters;
     }
@@ -77,5 +82,16 @@ public class MainActivity extends AppCompatActivity {
         }
         selectedLetterString = selectedLetterString.substring(0, selectedLetterString.length()-1);
         return selectedLetterString;
+    }
+
+    public boolean thereAreTwoVowels(ArrayList<String> letters) {
+        int vowelCount = 0;
+        String vowels = "AEIOU";
+        for (String letter : letters) {
+            if (vowels.contains(letter)) {
+                vowelCount++;
+            }
+        }
+        return vowelCount >= 2;
     }
 }

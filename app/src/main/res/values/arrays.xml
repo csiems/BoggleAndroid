@@ -1,17 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="dice">
+        <item>@array/die0</item>
         <item>@array/die1</item>
         <item>@array/die2</item>
+        <item>@array/die3</item>
+        <item>@array/die4</item>
+        <item>@array/die5</item>
+        <item>@array/die6</item>
+        <item>@array/die7</item>
+        <item>@array/die8</item>
+        <item>@array/die9</item>
+        <item>@array/die10</item>
+        <item>@array/die11</item>
+        <item>@array/die12</item>
+        <item>@array/die13</item>
+        <item>@array/die14</item>
+        <item>@array/die15</item>
     </array>
 
-    <string-array name="die1">
+    <string-array name="die0">
         <item>R</item>
         <item>I</item>
         <item>F</item>
         <item>O</item>
         <item>B</item>
         <item>X</item>
+    </string-array>
+
+    <string-array name="die1">
+        <item>D</item>
+        <item>E</item>
+        <item>N</item>
+        <item>O</item>
+        <item>W</item>
+        <item>S</item>
     </string-array>
 
     <string-array name="die2">
@@ -22,4 +45,122 @@
         <item>E</item>
         <item>Y</item>
     </string-array>
+
+    <string-array name="die3">
+        <item>U</item>
+        <item>T</item>
+        <item>O</item>
+        <item>K</item>
+        <item>N</item>
+        <item>D</item>
+    </string-array>
+
+    <string-array name="die4">
+        <item>H</item>
+        <item>M</item>
+        <item>S</item>
+        <item>R</item>
+        <item>A</item>
+        <item>O</item>
+    </string-array>
+
+    <string-array name="die5">
+        <item>L</item>
+        <item>U</item>
+        <item>P</item>
+        <item>E</item>
+        <item>T</item>
+        <item>S</item>
+    </string-array>
+
+    <string-array name="die6">
+        <item>A</item>
+        <item>C</item>
+        <item>I</item>
+        <item>T</item>
+        <item>O</item>
+        <item>A</item>
+    </string-array>
+
+    <string-array name="die7">
+        <item>Y</item>
+        <item>L</item>
+        <item>G</item>
+        <item>K</item>
+        <item>U</item>
+        <item>E</item>
+    </string-array>
+
+    <string-array name="die8">
+        <item>Qu</item>
+        <item>B</item>
+        <item>M</item>
+        <item>J</item>
+        <item>O</item>
+        <item>A</item>
+    </string-array>
+
+    <string-array name="die9">
+        <item>E</item>
+        <item>H</item>
+        <item>I</item>
+        <item>S</item>
+        <item>P</item>
+        <item>N</item>
+    </string-array>
+
+    <string-array name="die10">
+        <item>V</item>
+        <item>E</item>
+        <item>T</item>
+        <item>I</item>
+        <item>G</item>
+        <item>N</item>
+    </string-array>
+
+    <string-array name="die11">
+        <item>B</item>
+        <item>A</item>
+        <item>L</item>
+        <item>I</item>
+        <item>Y</item>
+        <item>T</item>
+    </string-array>
+
+    <string-array name="die12">
+        <item>E</item>
+        <item>Z</item>
+        <item>A</item>
+        <item>V</item>
+        <item>N</item>
+        <item>D</item>
+    </string-array>
+
+    <string-array name="die13">
+        <item>R</item>
+        <item>A</item>
+        <item>L</item>
+        <item>E</item>
+        <item>S</item>
+        <item>C</item>
+    </string-array>
+
+    <string-array name="die14">
+        <item>U</item>
+        <item>W</item>
+        <item>I</item>
+        <item>L</item>
+        <item>R</item>
+        <item>G</item>
+    </string-array>
+
+    <string-array name="die15">
+        <item>P</item>
+        <item>A</item>
+        <item>C</item>
+        <item>E</item>
+        <item>M</item>
+        <item>D</item>
+    </string-array>
+
 </resources>

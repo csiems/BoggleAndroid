@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.submitButton) Button submitButton;
     private TypedArray dice;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,27 +31,43 @@ public class MainActivity extends AppCompatActivity {
         rollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> selectedLetters = new ArrayList<>();
-                TypedArray itemDef;
-
-                for (int i = 0; i < dice.length(); i++) {
-                    int resId = dice.getResourceId(i, -1);
-                    if (resId < 0) {
-                        continue;
-                    }
-                    itemDef = getResources().obtainTypedArray(resId);
-                    int rolledSide = (int) (Math.random() * 5);
-
-                    selectedLetters.add(itemDef.getString(rolledSide));
-                }
-
+                ArrayList<Integer> diceToRoll = getDiceToRoll();
+                ArrayList<String> selectedLetters = rollDice(diceToRoll);
                 String newLetterString = getLetterString(selectedLetters);
                 lettersTextView.setText(newLetterString);
             }
-
         });
+    }
 
+    public ArrayList<Integer> getDiceToRoll() {
+        ArrayList<Integer> grabbedDice = new ArrayList<>();
 
+        for (int i = 0; i < 8; i++) {
+            Integer dieIndex = (int) (Math.random() * (dice.length() - 1));
+            if (grabbedDice.contains(dieIndex)) {
+                i--;
+            } else {
+                grabbedDice.add(dieIndex);
+            }
+        }
+        return grabbedDice;
+    }
+
+    public ArrayList<String> rollDice(ArrayList<Integer> diceToRoll) {
+        TypedArray specificDie;
+        ArrayList<String> letters = new ArrayList<>();
+        for (int i = 0; i < diceToRoll.size(); i++) {
+            int resId = dice.getResourceId(diceToRoll.get(i), -1);
+            if (resId < 0) {
+                continue;
+            }
+
+            specificDie = getResources().obtainTypedArray(resId);
+            int rolledSide = (int) (Math.random() * 5);
+            letters.add(specificDie.getString(rolledSide));
+            specificDie.recycle();
+        }
+        return letters;
     }
 
     public String getLetterString(ArrayList<String> selectedLetters) {

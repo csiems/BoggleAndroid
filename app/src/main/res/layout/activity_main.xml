@@ -12,73 +12,6 @@
     tools:context="com.epicodus.bogglesolo.MainActivity"
     android:background="@drawable/background">
 
-
-    <com.epicodus.bogglesolo.TitleTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="ROLL THE DICE TO START"
-        android:id="@+id/lettersTextView"
-        android:textAlignment="center"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="20dp"
-        android:textSize="40sp"
-        android:textColor="@color/colorPrimary" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Roll"
-        android:id="@+id/rollButton"
-        android:background="@color/colorAccent"
-        android:textColor="@color/colorText"
-        android:elevation="50sp"
-        android:layout_alignTop="@+id/wordCount"
-        android:layout_centerHorizontal="true" />
-
-    <GridView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/inputsGridView"
-        android:layout_below="@+id/rollButton"
-        android:layout_above="@+id/submitButton"
-        android:layout_marginTop="28dp"
-        android:gravity="center"
-        android:columnWidth="100dp"
-        android:stretchMode="columnWidth"
-        android:textAlignment="gravity"
-        android:numColumns="auto_fit"
-        android:choiceMode="multipleChoice"
-        android:layout_centerHorizontal="true"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="10sp"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit"
-        android:id="@+id/submitButton"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorAccent"
-        android:textColor="@color/colorText" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Enter A Word"
-        android:gravity="center"
-        android:textColorHint="@color/colorPrimary"
-        android:id="@+id/userInputEditText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/submitButton"
-        android:layout_toStartOf="@+id/submitButton"
-        android:textColor="@color/colorPrimary" />
-
     <com.epicodus.bogglesolo.WordTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,5 +30,63 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:textColor="@color/colorPrimary"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Roll"
+        android:id="@+id/rollButton"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorText"
+        android:elevation="50sp"
+        android:layout_below="@+id/countdownTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:id="@+id/submitButton"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorText"
+        android:layout_alignTop="@+id/rollButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="ROLL THE DICE TO START"
+        android:gravity="center"
+        android:textColorHint="@color/colorPrimary"
+        android:id="@+id/userInputTextView"
+        android:textColor="@color/colorPrimary"
+        android:layout_above="@+id/inputsGridView"
+        android:layout_toEndOf="@+id/rollButton"
+        android:layout_toRightOf="@id/rollButton"
+        android:layout_toLeftOf="@+id/submitButton"
+        android:layout_toStartOf="@+id/submitButton" />
+
+    <GridView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/inputsGridView"
+        android:layout_below="@+id/rollButton"
+        android:gravity="center"
+        android:stretchMode="columnWidth"
+        android:textAlignment="gravity"
+        android:numColumns="4"
+        android:choiceMode="multipleChoice"
+        android:layout_centerHorizontal="true"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10sp"/>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/inputsListView"
+        android:layout_below="@+id/inputsGridView" />
+
 
 </RelativeLayout>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BoggleSolo</string>
+    <string name="word_count">Word Count: </string>
 </resources>

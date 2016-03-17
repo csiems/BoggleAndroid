@@ -6,10 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,13 +23,15 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.inputsGridView) GridView mGridView;
     @Bind(R.id.rollButton) Button rollButton;
     @Bind(R.id.submitButton) Button submitButton;
-    @Bind(R.id.userInputEditText) EditText userInputEditText;
+    @Bind(R.id.userInputTextView) TextView userInputTextView;
+    @Bind(R.id.inputsListView) ListView mListView;
     @Bind(R.id.countdownTextView) TextView countdownTextView;
     @Bind(R.id.wordCount) TextView wordCount;
     private TypedArray mDice;
     private ArrayList<String> mSelectedLetters;
     private ArrayList<String> mUserInputs = new ArrayList<>();
     private ArrayAdapter gridViewAdapter;
+    private ArrayAdapter listViewAdapter;
     private int wordCountNumber;
 
     @Override
@@ -40,51 +43,58 @@ public class MainActivity extends AppCompatActivity {
         mDice = getResources().obtainTypedArray(R.array.dice);
         submitButton.setEnabled(false);
         wordCountNumber = 0;
-        wordCount.setText("Word Count: " + wordCountNumber);
+        wordCount.setText(R.string.word_count + wordCountNumber);
 
-
-
+        //TODO: replace gridview adaptor with temp for modification, repopulate field after every submit.
 
         rollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cleanUpFromLastRound();
+            cleanUpFromLastRound();
 
-                ArrayList<Integer> diceToRoll = getDiceToRoll();
-                mSelectedLetters = rollDice(diceToRoll);
-                String newLetterString = getLetterString(mSelectedLetters);
-                gridViewAdapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, mSelectedLetters);
-                mGridView.setAdapter(gridViewAdapter);
+            ArrayList<Integer> diceToRoll = getDiceToRoll();
+            mSelectedLetters = rollDice(diceToRoll);
+            gridViewAdapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, mSelectedLetters);
+            mGridView.setAdapter(gridViewAdapter);
 
-                beginCountdown();
+            beginCountdown();
+            mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String letter = new String (parent.getItemAtPosition(position).toString());
+                    gridViewAdapter.remove(letter);
+                    gridViewAdapter.insert("", position);
+                    gridViewAdapter.notifyDataSetChanged();
+                    userInputTextView.append(letter);
+
+                    submitButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String userInput;
+
+                            if (userInputTextView.getText().toString().equals("ROLL THE DICE TO START")) {
+                                makeToast("Roll the dice before submitting words");
+                            } else {
+                                userInput = validateInput(userInputTextView.getText().toString());
+                                if (userInput.length() < 3) {
+                                    makeToast("Enter a word of at least three letters");
+                                } else if (!allLettersAreInList(mSelectedLetters, userInput)) {
+                                    makeToast("You must go to Boggle with the letters you have, not the letters you wish you had.");
+                                } else if (mUserInputs.contains(userInput)) {
+                                    makeToast("Word already added");
+                                } else {
+                                    addInputToListView(userInput);
+                                }
+                            }
+                            userInputTextView.setText("");
+
+                        }
+                    });
+
+                }
+            });
             }
         });
-
-//        submitButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String userInput;
-//
-//                if (lettersTextView.getText().toString().equals("ROLL THE DICE TO START")) {
-//                    makeToast("Roll the dice before submitting words");
-//                } else {
-//                    userInput = validateInput(userInputEditText.getText().toString());
-//                    if (userInput.length() < 3) {
-//                        makeToast("Enter a word of at least three letters");
-//                    } else if (!allLettersAreInList(mSelectedLetters, userInput)) {
-//                        makeToast("You must go to Boggle with the letters you have, not the letters you wish you had.");
-//                    } else if (mUserInputs.contains(userInput)) {
-//                        makeToast("Word already added");
-//                    } else {
-//                        mUserInputs.add(0, userInput);
-//                        listViewAdapter.notifyDataSetChanged();
-//                        wordCountNumber++;
-//                        wordCount.setText("Word Count: " + wordCountNumber);
-//                    }
-//                }
-//                userInputEditText.setText("");
-//            }
-//        });
     }
 
     public ArrayList<Integer> getDiceToRoll() {
@@ -180,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 countdownTextView.setText("Time's Up!");
                 submitButton.setEnabled(false);
-                userInputEditText.setText("");
+                userInputTextView.setText("");
                 wordCountNumber = 0;
                 rollButton.setVisibility(View.VISIBLE);
                 rollButton.setEnabled(true);
@@ -191,7 +201,13 @@ public class MainActivity extends AppCompatActivity {
     public void cleanUpFromLastRound() {
         mUserInputs.clear();
         wordCountNumber = 0;
-        wordCount.setText("Word Count: " + wordCountNumber);
+        wordCount.setText(R.string.word_count + wordCountNumber);
     }
 
+    public void addInputToListView(String input) {
+        mUserInputs.add(0, input);
+        listViewAdapter.notifyDataSetChanged();
+        wordCountNumber++;
+        wordCount.setText(R.string.word_count + wordCountNumber);
+    }
 }

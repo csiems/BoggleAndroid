@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,17 +19,16 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-    @Bind(R.id.lettersTextView) TextView lettersTextView;
+    @Bind(R.id.inputsGridView) GridView mGridView;
     @Bind(R.id.rollButton) Button rollButton;
     @Bind(R.id.submitButton) Button submitButton;
     @Bind(R.id.userInputEditText) EditText userInputEditText;
-    @Bind(R.id.inputsListView) ListView inputsListView;
     @Bind(R.id.countdownTextView) TextView countdownTextView;
     @Bind(R.id.wordCount) TextView wordCount;
     private TypedArray mDice;
     private ArrayList<String> mSelectedLetters;
     private ArrayList<String> mUserInputs = new ArrayList<>();
-    private ArrayAdapter adapter;
+    private ArrayAdapter gridViewAdapter;
     private int wordCountNumber;
 
     @Override
@@ -43,41 +42,49 @@ public class MainActivity extends AppCompatActivity {
         wordCountNumber = 0;
         wordCount.setText("Word Count: " + wordCountNumber);
 
-        adapter = new ArrayAdapter(this, R.layout.word_list_item, mUserInputs);
-        inputsListView.setAdapter(adapter);
+
+
 
         rollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setupGame();
-            }
-        });
-        
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String userInput;
+                cleanUpFromLastRound();
 
-                if (lettersTextView.getText().toString().equals("ROLL THE DICE TO START")) {
-                    makeToast("Roll the dice before submitting words");
-                } else {
-                    userInput = validateInput(userInputEditText.getText().toString());
-                    if (userInput.length() < 3) {
-                        makeToast("Enter a word of at least three letters");
-                    } else if (!allLettersAreInList(mSelectedLetters, userInput)) {
-                        makeToast("You must go to Boggle with the letters you have, not the letters you wish you had.");
-                    } else if (mUserInputs.contains(userInput)) {
-                        makeToast("Word already added");
-                    } else {
-                        mUserInputs.add(0, userInput);
-                        adapter.notifyDataSetChanged();
-                        wordCountNumber++;
-                        wordCount.setText("Word Count: " + wordCountNumber);
-                    }
-                }
-                userInputEditText.setText("");
+                ArrayList<Integer> diceToRoll = getDiceToRoll();
+                mSelectedLetters = rollDice(diceToRoll);
+                String newLetterString = getLetterString(mSelectedLetters);
+                gridViewAdapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, mSelectedLetters);
+                mGridView.setAdapter(gridViewAdapter);
+
+                beginCountdown();
             }
         });
+
+//        submitButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String userInput;
+//
+//                if (lettersTextView.getText().toString().equals("ROLL THE DICE TO START")) {
+//                    makeToast("Roll the dice before submitting words");
+//                } else {
+//                    userInput = validateInput(userInputEditText.getText().toString());
+//                    if (userInput.length() < 3) {
+//                        makeToast("Enter a word of at least three letters");
+//                    } else if (!allLettersAreInList(mSelectedLetters, userInput)) {
+//                        makeToast("You must go to Boggle with the letters you have, not the letters you wish you had.");
+//                    } else if (mUserInputs.contains(userInput)) {
+//                        makeToast("Word already added");
+//                    } else {
+//                        mUserInputs.add(0, userInput);
+//                        listViewAdapter.notifyDataSetChanged();
+//                        wordCountNumber++;
+//                        wordCount.setText("Word Count: " + wordCountNumber);
+//                    }
+//                }
+//                userInputEditText.setText("");
+//            }
+//        });
     }
 
     public ArrayList<Integer> getDiceToRoll() {
@@ -181,16 +188,10 @@ public class MainActivity extends AppCompatActivity {
         }.start();
     }
 
-    public void setupGame() {
+    public void cleanUpFromLastRound() {
         mUserInputs.clear();
-        adapter.notifyDataSetChanged();
         wordCountNumber = 0;
         wordCount.setText("Word Count: " + wordCountNumber);
-        ArrayList<Integer> diceToRoll = getDiceToRoll();
-        mSelectedLetters = rollDice(diceToRoll);
-        String newLetterString = getLetterString(mSelectedLetters);
-        lettersTextView.setText(newLetterString);
-        submitButton.setEnabled(true);
-        beginCountdown();
     }
+
 }

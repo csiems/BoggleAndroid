@@ -35,17 +35,24 @@
         android:id="@+id/rollButton"
         android:background="@color/colorAccent"
         android:textColor="@color/colorText"
-        android:layout_below="@+id/lettersTextView"
-        android:layout_centerHorizontal="true"
-        android:elevation="50sp" />
+        android:elevation="50sp"
+        android:layout_alignTop="@+id/wordCount"
+        android:layout_centerHorizontal="true" />
 
-    <ListView
+    <GridView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/inputsListView"
+        android:id="@+id/inputsGridView"
         android:layout_below="@+id/rollButton"
-        android:layout_centerHorizontal="true"
         android:layout_above="@+id/submitButton"
+        android:layout_marginTop="28dp"
+        android:gravity="center"
+        android:columnWidth="100dp"
+        android:stretchMode="columnWidth"
+        android:textAlignment="gravity"
+        android:numColumns="auto_fit"
+        android:choiceMode="multipleChoice"
+        android:layout_centerHorizontal="true"
         android:divider="@android:color/transparent"
         android:dividerHeight="10sp"/>
 
@@ -55,8 +62,6 @@
         android:text="Submit"
         android:id="@+id/submitButton"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/inputsListView"
-        android:layout_alignEnd="@+id/inputsListView"
         android:background="@color/colorAccent"
         android:textColor="@color/colorText" />
 

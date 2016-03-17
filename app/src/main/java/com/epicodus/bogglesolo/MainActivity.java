@@ -1,6 +1,7 @@
 package com.epicodus.bogglesolo;
 
 import android.content.res.TypedArray;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -23,10 +24,13 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.submitButton) Button submitButton;
     @Bind(R.id.userInputEditText) EditText userInputEditText;
     @Bind(R.id.inputsListView) ListView inputsListView;
+    @Bind(R.id.countdownTextView) TextView countdownTextView;
+    @Bind(R.id.wordCount) TextView wordCount;
     private TypedArray mDice;
     private ArrayList<String> mSelectedLetters;
     private ArrayList<String> mUserInputs = new ArrayList<>();
     private ArrayAdapter adapter;
+    private int wordCountNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mDice = getResources().obtainTypedArray(R.array.dice);
+        submitButton.setEnabled(false);
+        wordCountNumber = 0;
+        wordCount.setText("Word Count: " + wordCountNumber);
 
         adapter = new ArrayAdapter(this, R.layout.word_list_item, mUserInputs);
         inputsListView.setAdapter(adapter);
@@ -42,10 +49,7 @@ public class MainActivity extends AppCompatActivity {
         rollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Integer> diceToRoll = getDiceToRoll();
-                mSelectedLetters = rollDice(diceToRoll);
-                String newLetterString = getLetterString(mSelectedLetters);
-                lettersTextView.setText(newLetterString);
+                setupGame();
             }
         });
         
@@ -67,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         mUserInputs.add(0, userInput);
                         adapter.notifyDataSetChanged();
+                        wordCountNumber++;
+                        wordCount.setText("Word Count: " + wordCountNumber);
                     }
                 }
                 userInputEditText.setText("");
@@ -153,5 +159,38 @@ public class MainActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, -30);
         toast.show();
+    }
+
+    public void beginCountdown() {
+        rollButton.setVisibility(View.GONE);
+        rollButton.setEnabled(false);
+        new CountDownTimer(30000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                countdownTextView.setText("Seconds remaining: " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+                countdownTextView.setText("Time's Up!");
+                submitButton.setEnabled(false);
+                userInputEditText.setText("");
+                wordCountNumber = 0;
+                rollButton.setVisibility(View.VISIBLE);
+                rollButton.setEnabled(true);
+            }
+        }.start();
+    }
+
+    public void setupGame() {
+        mUserInputs.clear();
+        adapter.notifyDataSetChanged();
+        wordCountNumber = 0;
+        wordCount.setText("Word Count: " + wordCountNumber);
+        ArrayList<Integer> diceToRoll = getDiceToRoll();
+        mSelectedLetters = rollDice(diceToRoll);
+        String newLetterString = getLetterString(mSelectedLetters);
+        lettersTextView.setText(newLetterString);
+        submitButton.setEnabled(true);
+        beginCountdown();
     }
 }

@@ -33,10 +33,11 @@
         android:layout_height="wrap_content"
         android:text="Roll"
         android:id="@+id/rollButton"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorText"
         android:layout_below="@+id/lettersTextView"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorAccent"
-        android:textColor="@color/colorText" />
+        android:elevation="50sp" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -72,5 +73,24 @@
         android:layout_toLeftOf="@+id/submitButton"
         android:layout_toStartOf="@+id/submitButton"
         android:textColor="@color/colorPrimary" />
+
+    <com.epicodus.bogglesolo.WordTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/countdownTextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/colorPrimary" />
+
+    <com.epicodus.bogglesolo.WordTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/wordCount"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/colorPrimary"/>
 
 </RelativeLayout>
